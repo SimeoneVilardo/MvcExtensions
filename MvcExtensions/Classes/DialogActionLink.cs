@@ -1,9 +1,8 @@
 ﻿using MvcExtensions.Enumerations;
 using MvcExtensions.Structs;
-using Newtonsoft.Json;
 using System;
 using System.Web.Mvc;
-using Yahoo.Yui.Compressor;
+using System.Web.Script.Serialization;
 
 namespace MvcExtensions.Classes
 {
@@ -140,7 +139,7 @@ namespace MvcExtensions.Classes
                     {1}
                 }});",
                 buttonId, bootstrapDialog);
-            string scriptMin = string.Concat("<script>", new JavaScriptCompressor().Compress(script), @"</script>");
+            string scriptMin = string.Concat("<script>", new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(script), @"</script>");
             string buttonDialog = string.Concat(button, scriptMin);
             return MvcHtmlString.Create(buttonDialog);
         }
@@ -195,7 +194,7 @@ namespace MvcExtensions.Classes
 
         private static string createAjaxDialogFunction(string ActionName, string ControllerName, object Data, AjaxMethod AjaxMethod, string CallbackFunction, string AjaxFunctionCodeExtension)
         {
-            var jsonData = JsonConvert.SerializeObject(Data);
+            var jsonData = new JavaScriptSerializer().Serialize(Data);
             string dialogFunction = string.Format(@"
                 function(dialogItself) {{
                     $.ajax({{
