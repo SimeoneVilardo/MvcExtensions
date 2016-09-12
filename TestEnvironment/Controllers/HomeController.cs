@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using TestEnvironment.Models;
 
 namespace TestEnvironment.Controllers
 {
@@ -21,6 +22,11 @@ namespace TestEnvironment.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult TestGetViewWithData(TestModel Data)
+        {
+            return View("Test");
         }
     }
 }

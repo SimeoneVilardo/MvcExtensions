@@ -8,116 +8,38 @@ namespace MvcExtensions.Classes
 {
     public static class DialogActionLink
     {
+        #region Default Values
         private static DialogSize mDefaultSize = DialogSize.Normal;
         private static ClientMessageType mDefaultMessageType = ClientMessageType.Warning;
         private static AjaxMethod mDefaultAjaxMethod = AjaxMethod.GET;
         private static AjaxInsertionMode mDefaultInsertionMode = AjaxInsertionMode.Replace;
+        #endregion
 
+        #region Public Methods
         public static MvcHtmlString DialogAjaxViewActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText, AjaxMethod AjaxMethod, string UpdateTargetId, AjaxInsertionMode InsertionMode)
         {
+            checkNullDialogAjaxViewActionLink(ref MessageType, ref Size, ref AjaxMethod, ref InsertionMode);
             string dialogFunction = createPartialViewDialogFunction(ActionName, ControllerName, Data, AjaxMethod, UpdateTargetId, InsertionMode, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, dialogFunction);
-        }
-
-
-        public static MvcHtmlString DialogAjaxViewActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText, AjaxMethod AjaxMethod, string UpdateTargetId)
-        {
-            string dialogFunction = createPartialViewDialogFunction(ActionName, ControllerName, Data, AjaxMethod, UpdateTargetId, mDefaultInsertionMode, AjaxFunctionCodeExtension);
             return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, dialogFunction);
         }
 
         public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText, AjaxMethod AjaxMethod)
         {
+            checkNullDialogAjaxActionLink(ref MessageType, ref Size, ref AjaxMethod);
             string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, AjaxMethod, AjaxFunctionCodeExtension);
             return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, dialogFunction);
         }
 
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, string.Empty, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_TEXT, string.Empty, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, ControllerName, Data, mDefaultAjaxMethod, string.Empty);
-            return DialogGenericActionLink(html, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_TEXT, string.Empty, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, System.Web.HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString(), Data, mDefaultAjaxMethod, string.Empty);
-            return DialogGenericActionLink(html, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_TEXT, string.Empty, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName)
-        {
-            string dialogFunction = createSimpleDialogFunction(ActionName, System.Web.HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString(), null, mDefaultAjaxMethod, string.Empty);
-            return DialogGenericActionLink(html, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_TEXT, string.Empty, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, dialogFunction);
-        }
-
         public static MvcHtmlString DialogAjaxJsonActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText, AjaxMethod AjaxMethod, string[] JsonProps)
         {
+            checkNullDialogAjaxActionLink(ref MessageType, ref Size, ref AjaxMethod);
             string dialogFunction = createJsonDialogFunction(ActionName, ControllerName, Data, AjaxMethod, JsonProps, AjaxFunctionCodeExtension);
-            return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, dialogFunction);
-        }
-
-        public static MvcHtmlString DialogAjaxJsonActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText, AjaxMethod AjaxMethod)
-        {
-            string dialogFunction = createJsonDialogFunction(ActionName, ControllerName, Data, AjaxMethod, null, AjaxFunctionCodeExtension);
             return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, dialogFunction);
         }
 
         public static MvcHtmlString DialogHtmlActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText)
         {
+            checkNullDialogHtmlActionLink(ref MessageType, ref Size);
             string dialogFunction = createFullReqDialogFunction(ActionName, ControllerName, Data);
             return DialogGenericActionLink(html, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, dialogFunction);
         }
@@ -143,7 +65,110 @@ namespace MvcExtensions.Classes
             string buttonDialog = string.Concat(button, scriptMin);
             return MvcHtmlString.Create(buttonDialog);
         }
+        #endregion
 
+        #region DialogAjaxViewActionLink Overloads
+        public static MvcHtmlString DialogAjaxViewActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText, AjaxMethod AjaxMethod, string UpdateTargetId)
+        {
+            return DialogAjaxViewActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, AjaxMethod, UpdateTargetId, mDefaultInsertionMode);
+        }
+
+        public static MvcHtmlString DialogAjaxViewActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText, string UpdateTargetId)
+        {
+            return DialogAjaxViewActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, mDefaultAjaxMethod, UpdateTargetId, mDefaultInsertionMode);
+        }
+
+        public static MvcHtmlString DialogAjaxViewActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string UpdateTargetId)
+        {
+            return DialogAjaxViewActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod, UpdateTargetId, mDefaultInsertionMode);
+        }
+
+        public static MvcHtmlString DialogAjaxViewActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string UpdateTargetId)
+        {
+            return DialogAjaxViewActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod, UpdateTargetId, mDefaultInsertionMode);
+        }
+
+        public static MvcHtmlString DialogAjaxViewActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, string UpdateTargetId)
+        {
+            return DialogAjaxViewActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod, UpdateTargetId, mDefaultInsertionMode);
+        }
+
+        public static MvcHtmlString DialogAjaxViewActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string UpdateTargetId)
+        {
+            return DialogAjaxViewActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod, UpdateTargetId, mDefaultInsertionMode);
+        }
+        #endregion
+
+        #region DialogAjaxActionLink Overloads
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_ICON, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_ICON, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, ControllerName, Constants.DialogActionLink.CODE_EXTENSION, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_ICON, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName, object Data)
+        {
+            return DialogAjaxActionLink(html, ActionName, Data, System.Web.HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString(), Constants.DialogActionLink.CODE_EXTENSION, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_ICON, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+
+        public static MvcHtmlString DialogAjaxActionLink(this HtmlHelper html, string ActionName)
+        {
+            return DialogAjaxActionLink(html, ActionName, Constants.DialogActionLink.REQ_DATA, System.Web.HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString(), Constants.DialogActionLink.CODE_EXTENSION, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_OPEN_BUTTON_ICON, mDefaultMessageType, Constants.DialogActionLink.DIALOG_TITLE, Constants.DialogActionLink.DIALOG_MESSAGE, mDefaultSize, Constants.DialogActionLink.DIALOG_OK_BUTTON_TEXT, Constants.DialogActionLink.DIALOG_CLOSE_BUTTON_TEXT, mDefaultAjaxMethod);
+        }
+        #endregion
+
+        #region DialogAjaxJsonActionLink Overloads
+        public static MvcHtmlString DialogAjaxJsonActionLink(this HtmlHelper html, string ActionName, object Data, string ControllerName, string AjaxFunctionCodeExtension, string ButtonText, string ButtonIcon, ClientMessageType MessageType, string DialogTitle, string DialogMessage, DialogSize Size, string DialogOkButtonText, string DialogCloseButtonText, AjaxMethod AjaxMethod)
+        {
+            return DialogAjaxJsonActionLink(html, ActionName, Data, ControllerName, AjaxFunctionCodeExtension, ButtonText, ButtonIcon, MessageType, DialogTitle, DialogMessage, Size, DialogOkButtonText, DialogCloseButtonText, AjaxMethod, Constants.DialogActionLink.JSON_PROPERTIES);
+        }
+        #endregion
+
+        #region Private Methods
         private static string createSimpleDialogFunction(string ActionName, string ControllerName, object Data, AjaxMethod AjaxMethod, string AjaxFunctionCodeExtension)
         {
             string buttons = @"
@@ -194,7 +219,7 @@ namespace MvcExtensions.Classes
 
         private static string createAjaxDialogFunction(string ActionName, string ControllerName, object Data, AjaxMethod AjaxMethod, string CallbackFunction, string AjaxFunctionCodeExtension)
         {
-            var jsonData = new JavaScriptSerializer().Serialize(Data);
+            string jsonData = new JavaScriptSerializer().Serialize(Data);
             string dialogFunction = string.Format(@"
                 function(dialogItself) {{
                     $.ajax({{
@@ -245,5 +270,36 @@ namespace MvcExtensions.Classes
             string button = string.Format("<button id='{0}' class='btn btn-dialog {1}'>{2}{3}</button>", ButtonId, MessageType.ButtonValue, icon, ButtonText);
             return button;
         }
+
+        private static void checkNullDialogAjaxViewActionLink(ref ClientMessageType MessageType, ref DialogSize Size, ref AjaxMethod AjaxMethod, ref AjaxInsertionMode InsertionMode)
+        {
+            if (MessageType == null)
+                MessageType = mDefaultMessageType;
+            if (Size == null)
+                Size = mDefaultSize;
+            if (AjaxMethod == null)
+                AjaxMethod = mDefaultAjaxMethod;
+            if (InsertionMode == null)
+                InsertionMode = mDefaultInsertionMode;
+        }
+
+        private static void checkNullDialogAjaxActionLink(ref ClientMessageType MessageType, ref DialogSize Size, ref AjaxMethod AjaxMethod)
+        {
+            if (MessageType == null)
+                MessageType = mDefaultMessageType;
+            if (Size == null)
+                Size = mDefaultSize;
+            if (AjaxMethod == null)
+                AjaxMethod = mDefaultAjaxMethod;
+        }
+
+        private static void checkNullDialogHtmlActionLink(ref ClientMessageType MessageType, ref DialogSize Size)
+        {
+            if (MessageType == null)
+                MessageType = mDefaultMessageType;
+            if (Size == null)
+                Size = mDefaultSize;
+        }
+        #endregion
     }
 }
